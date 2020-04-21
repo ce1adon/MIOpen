@@ -35,7 +35,7 @@ __device__ float4_t __llvm_amdgcn_buffer_loadx4(int32x4_t rsrc,
                                                 bool glc,
                                                 bool slc) __asm("llvm.amdgcn.buffer.load.v4f32");
 
-__device__ half __llvm_amdgcn_buffer_load_f16(int32x4_t rsrc,
+__device__ half_t __llvm_amdgcn_buffer_load_f16(int32x4_t rsrc,
                                               index_t vindex,
                                               index_t offset,
                                               bool glc,
@@ -93,7 +93,7 @@ __device__ void __llvm_amdgcn_buffer_storex4(float4_t vdata,
                                              bool glc,
                                              bool slc) __asm("llvm.amdgcn.buffer.store.v4f32");
 
-__device__ void __llvm_amdgcn_buffer_store_f16(half vdata,
+__device__ void __llvm_amdgcn_buffer_store_f16(half_t vdata,
                                                int32x4_t rsrc,
                                                index_t vindex,
                                                index_t offset,
@@ -204,19 +204,19 @@ __device__ float amd_intrinsic_buffer_load<float, 1>(const float* p_src_block,
 }
 
 template <>
-__device__ half amd_intrinsic_buffer_load<half, 1>(const half* p_src_block,
+__device__ half_t amd_intrinsic_buffer_load<half_t, 1>(const half_t* p_src_block,
                                                    index_t src_thread_data_offset,
                                                    index_t src_const_data_offset)
 {
-    half dst;
+    half_t dst;
 
-    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half);
-    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half);
+    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half_t);
+    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> src_block_config;
+    BufferLoadStoreDwordConfig<half_t> src_block_config;
 
     // fill in byte 0 - 1
-    src_block_config.address[0] = const_cast<half*>(p_src_block);
+    src_block_config.address[0] = const_cast<half_t*>(p_src_block);
     // fill in byte 2
     src_block_config.range[2] = -1;
     // fill in byte 3
@@ -307,19 +307,19 @@ __device__ float2_t amd_intrinsic_buffer_load<float, 2>(const float* p_src_block
 }
 
 template <>
-__device__ half2_t amd_intrinsic_buffer_load<half, 2>(const half* p_src_block,
+__device__ half2_t amd_intrinsic_buffer_load<half_t, 2>(const half_t* p_src_block,
                                                       index_t src_thread_data_offset,
                                                       index_t src_const_data_offset)
 {
     half2_t dst_out;
 
-    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half);
-    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half);
+    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half_t);
+    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> src_block_config;
+    BufferLoadStoreDwordConfig<half_t> src_block_config;
 
     // fill in byte 0 - 1
-    src_block_config.address[0] = const_cast<half*>(p_src_block);
+    src_block_config.address[0] = const_cast<half_t*>(p_src_block);
     // fill in byte 2
     src_block_config.range[2] = -1;
     // fill in byte 3
@@ -410,19 +410,19 @@ __device__ float4_t amd_intrinsic_buffer_load<float, 4>(const float* p_src_block
 }
 
 template <>
-__device__ half4_t amd_intrinsic_buffer_load<half, 4>(const half* p_src_block,
+__device__ half4_t amd_intrinsic_buffer_load<half_t, 4>(const half_t* p_src_block,
                                                       index_t src_thread_data_offset,
                                                       index_t src_const_data_offset)
 {
     half4_t dst_out;
 
-    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half);
-    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half);
+    index_t src_thread_addr_offset = src_thread_data_offset * sizeof(half_t);
+    index_t src_const_addr_offset  = src_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> src_block_config;
+    BufferLoadStoreDwordConfig<half_t> src_block_config;
 
     // fill in byte 0 - 1
-    src_block_config.address[0] = const_cast<half*>(p_src_block);
+    src_block_config.address[0] = const_cast<half_t*>(p_src_block);
     // fill in byte 2
     src_block_config.range[2] = -1;
     // fill in byte 3
@@ -517,15 +517,15 @@ __device__ void amd_intrinsic_buffer_store<float, 1>(const float* p_src,
 }
 
 template <>
-__device__ void amd_intrinsic_buffer_store<half, 1>(const half* p_src,
-                                                    half* p_dst_block,
+__device__ void amd_intrinsic_buffer_store<half_t, 1>(const half_t* p_src,
+                                                    half_t* p_dst_block,
                                                     index_t dst_thread_data_offset,
                                                     index_t dst_const_data_offset)
 {
-    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half);
-    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half);
+    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half_t);
+    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> dst_block_config;
+    BufferLoadStoreDwordConfig<half_t> dst_block_config;
 
     // fill in byte 0 - 1
     dst_block_config.address[0] = p_dst_block;
@@ -628,15 +628,15 @@ __device__ void amd_intrinsic_buffer_store<float, 2>(const float* p_src,
 }
 
 template <>
-__device__ void amd_intrinsic_buffer_store<half, 2>(const half* p_src,
-                                                    half* p_dst_block,
+__device__ void amd_intrinsic_buffer_store<half_t, 2>(const half_t* p_src,
+                                                    half_t* p_dst_block,
                                                     index_t dst_thread_data_offset,
                                                     index_t dst_const_data_offset)
 {
-    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half);
-    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half);
+    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half_t);
+    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> dst_block_config;
+    BufferLoadStoreDwordConfig<half_t> dst_block_config;
 
     // fill in byte 0 - 1
     dst_block_config.address[0] = p_dst_block;
@@ -738,15 +738,15 @@ __device__ void amd_intrinsic_buffer_store<float, 4>(const float* p_src,
 }
 
 template <>
-__device__ void amd_intrinsic_buffer_store<half, 4>(const half* p_src,
-                                                    half* p_dst_block,
+__device__ void amd_intrinsic_buffer_store<half_t, 4>(const half_t* p_src,
+                                                    half_t* p_dst_block,
                                                     index_t dst_thread_data_offset,
                                                     index_t dst_const_data_offset)
 {
-    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half);
-    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half);
+    index_t dst_thread_addr_offset = dst_thread_data_offset * sizeof(half_t);
+    index_t dst_const_addr_offset  = dst_const_data_offset * sizeof(half_t);
 
-    BufferLoadStoreDwordConfig<half> dst_block_config;
+    BufferLoadStoreDwordConfig<half_t> dst_block_config;
 
     // fill in byte 0 - 1
     dst_block_config.address[0] = p_dst_block;
