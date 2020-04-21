@@ -359,6 +359,9 @@ ConvSolution ConvHipImplicitGemmV4R1Fwd::GetSolution(const ConvolutionContext& c
             std::to_string(WeiBlockCopyDstDataPerWrite_EPack);
     }
 
+
+    MIOPEN_LOG_I2(construction_parameters);
+
     result.construction_params.push_back(construction_parameters);
     return result;
 }

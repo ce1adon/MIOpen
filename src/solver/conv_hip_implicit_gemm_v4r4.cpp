@@ -768,6 +768,8 @@ ConvSolution ConvHipImplicitGemmV4R4Fwd::GetSolution(const ConvolutionContext& c
         }
 
     // clang-format on
+/
+    MIOPEN_LOG_I2(construction_parameters);
 
     result.construction_params.push_back(construction_parameters);
     return result;
