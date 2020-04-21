@@ -339,6 +339,8 @@ ConvSolution ConvHipImplicitGemmV4R1Fwd::GetSolution(const ConvolutionContext& c
         std::string(" -DCK_PARAM_EPACK_LENGTH=") + std::to_string(GetEPackLength(ctx, false)) +
         std::string(" -DCK_THREADWISE_GEMM_USE_AMD_INLINE_ASM=") + (use_amd_inline_asm(ctx) ? '1' : '0') +
         std::string(" -DCK_USE_AMD_INLINE_ASM=") + (use_amd_inline_asm(ctx) ? '1' : '0') +
+        std::string(" -DCK_USE_AMD_BUFFER_ADDRESSING=") + (miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM_USE_AMD_BUFFER_ADDRESSING{}) ? '0' : '1') +
+        std::string(" -DCK_USE_AMD_BUFFER_ADDRESSING_INTRINSIC=") + (miopen::IsDisabled(MIOPEN_DEBUG_CONV_IMPLICIT_GEMM_USE_AMD_BUFFER_ADDRESSING_INTRINSIC{}) ? '0' : '1') +
         ctx.general_compile_options;
     // clang-format on
 
