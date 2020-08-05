@@ -1,0 +1,89 @@
+MIOpenDriver conv -z default -g 1 -n 1 -c 1 -H 1 -W 1 -k 1 -x 2 -y 2 -p 0 -q 0 -u 1 -v 1 -l 1 -j 1 -i 1 -F 4
+m   1
+n   4
+k   1
+lda   1
+ldb   1
+ldc   4
+batch_count   1
+gemm_desc.transA   0
+mtA_len0   1
+mtA_len1   1
+mtA_str0   1
+mtA_str1   1
+mtA_b_n   1
+mtA_b_str   0
+gemm_desc.transB   1
+mtB_len0   4
+mtB_len1   1
+mtB_str0   1
+mtB_str1   1
+mtB_b_n   1
+mtB_b_str   0
+mtC_len0   1
+mtC_len1   4
+mtC_str0   4
+mtC_str1   1
+mtC_b_n   1
+mtC_b_str   0
+tensile gemm
+gemm_desc.transA   0
+mtA_len0   1
+mtA_len1   1
+mtA_str0   1
+mtA_str1   1
+mtA_b_n   1
+mtA_b_str   0
+gemm_desc.transB   1
+mtB_len0   4
+mtB_len1   1
+mtB_str0   1
+mtB_str1   1
+mtB_b_n   1
+mtB_b_str   0
+mtC_len0   1
+mtC_len1   4
+mtC_str0   4
+mtC_str1   1
+mtC_b_n   1
+mtC_b_str   0
+tensile gemm
+m   1
+n   4
+k   1
+lda   1
+ldb   1
+ldc   4
+batch_count   1
+gemm_desc.transA   0
+mtA_len0   1
+mtA_len1   1
+mtA_str0   1
+mtA_str1   1
+mtA_b_n   1
+mtA_b_str   0
+gemm_desc.transB   1
+mtB_len0   4
+mtB_len1   1
+mtB_str0   1
+mtB_str1   1
+mtB_b_n   1
+mtB_b_str   0
+mtC_len0   1
+mtC_len1   4
+mtC_str0   4
+mtC_str1   1
+mtC_b_n   1
+mtC_b_str   0
+tensile gemm
+Backward Convolution Weights Verifies on CPU and GPU (0)
+in   0   1.00000000000000000000 
+wksp    0   1.00000000000000000000 
+wksp    1   0.00000000000000000000 
+wksp    2   0.00000000000000000000 
+wksp    3   0.00000000000000000000 
+dout   0   1.00000000000000000000 
+dwei    0   1.00000000000000000000   1.00000000000000000000 
+dwei    1   0.00000000000000000000   0.00000000000000000000 
+dwei    2   0.00000000000000000000   0.00000000000000000000 
+dwei    3   0.00000000000000000000   0.00000000000000000000 
