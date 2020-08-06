@@ -3626,7 +3626,7 @@ void ConvolutionDescriptor::FindConvBwdWeightsAlgorithm(Handle& handle,
                     }
                     float time_im2col = 0;
                     int in_offset     = 0;
-                    time_im2col       = Im2ColGPU(handle,
+  /*                  time_im2col       = Im2ColGPU(handle,
                                             GetSpatialDimension(),
                                             x,
                                             in_offset,
@@ -3639,7 +3639,7 @@ void ConvolutionDescriptor::FindConvBwdWeightsAlgorithm(Handle& handle,
                                             GetConvDilations(),
                                             workSpace,
                                             dyDesc.GetType());
-
+*/
                     // dw = dy * transpose(Im2Col(x))
                     GemmDescriptor gemm_desc =
                         group_count > 1 ? CreateGemmDescriptorGroupConvBwdWeight(
@@ -4305,7 +4305,7 @@ void ConvolutionDescriptor::BackwardWeightsGemm(Handle& handle,
             std::size_t out_offset = i * wei_k * out_spatial_size;
 
             std::size_t in_offset = i * in_c * in_spatial_size;
-
+/*
             Im2ColGPU(handle,
                       GetSpatialDimension(),
                       tensors.x,
@@ -4319,7 +4319,7 @@ void ConvolutionDescriptor::BackwardWeightsGemm(Handle& handle,
                       GetConvDilations(),
                       workSpace,
                       tensors.dyDesc.GetType());
-
+*/
             if(handle.IsProfilingEnabled())
                 t1 = handle.GetKernelTime();
 

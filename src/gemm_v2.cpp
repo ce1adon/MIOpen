@@ -397,6 +397,28 @@ miopenStatus_t CallGemmMIOpenTensile(const Handle& handle,
     auto mtC_str1  = size_t(1);
     auto mtC_b_n   = size_t(gemm_desc.batch_count);
     auto mtC_b_str = size_t(gemm_desc.strideC);
+printf("gemm_desc.transA   %d\n", int(gemm_desc.transA));
+printf("mtA_len0   %d\n", mtA_len0);
+printf("mtA_len1   %d\n", mtA_len1);
+printf("mtA_str0   %d\n", mtA_str0);
+printf("mtA_str1   %d\n", mtA_str1);
+printf("mtA_b_n   %d\n", mtA_b_n);
+printf("mtA_b_str   %d\n", mtA_b_str);
+
+printf("gemm_desc.transB   %d\n", int(gemm_desc.transB));
+printf("mtB_len0   %d\n", mtB_len0);
+printf("mtB_len1   %d\n", mtB_len1);
+printf("mtB_str0   %d\n", mtB_str0);
+printf("mtB_str1   %d\n", mtB_str1);
+printf("mtB_b_n   %d\n", mtB_b_n);
+printf("mtB_b_str   %d\n", mtB_b_str);
+
+printf("mtC_len0   %d\n", mtC_len0);
+printf("mtC_len1   %d\n", mtC_len1);
+printf("mtC_str0   %d\n", mtC_str0);
+printf("mtC_str1   %d\n", mtC_str1);
+printf("mtC_b_n   %d\n", mtC_b_n);
+printf("mtC_b_str   %d\n", mtC_b_str);
 
     miopen_tensile_matrix mtA{{mtA_len0, mtA_len1},
                               {mtA_str0, mtA_str1},
@@ -1499,7 +1521,13 @@ GemmDescriptor CreateGemmDescriptorConvBwdWeight(const TensorDescriptor& dyDesc,
     long long int strideC = 0;
     float alpha           = 1.;
     float beta            = 1.;
-
+printf("m   %d\n", m);
+printf("n   %d\n", n);
+printf("k   %d\n", k);
+printf("lda   %d\n", lda);
+printf("ldb   %d\n", ldb);
+printf("ldc   %d\n", ldc);
+printf("batch_count   %d\n", batch_count);
     return GemmDescriptor{isColMajor,
                           transA,
                           transB,

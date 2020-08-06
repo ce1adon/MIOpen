@@ -289,7 +289,7 @@ class ConvDriver : public Driver
     std::vector<float> out_int8;
     std::vector<Tgpu> db;
     std::vector<float> b_int8;
-
+std::vector<Tgpu> workspace;
     miopenConvolutionDescriptor_t convDesc;
     miopenConvolutionDescriptor_t warmupConvDesc;
 
@@ -1037,6 +1037,7 @@ int ConvDriver<Tgpu, Tref>::AllocateBuffersAndCopy()
         if(wsSizeof != 0)
         {
             workspace_dev = std::unique_ptr<GPUMem>(new GPUMem(ctx, wsSizeof, 1));
+workspace = std::vector<Tgpu>(wsSizeof/sizeof(Tgpu), static_cast<Tgpu>(0));
         }
     }
 
@@ -1150,8 +1151,8 @@ int ConvDriver<Tgpu, Tref>::AllocateBuffersAndCopy()
             for(int i = 0; i < in_sz; i++)
             {
                 if(is_fwd || is_wrw)
-                    in.data[i] =
-                        Data_scale * RAN_GEN<Tgpu>(static_cast<Tgpu>(0.0), static_cast<Tgpu>(1.0));
+                    in.data[i] = 1;
+                      //  Data_scale * RAN_GEN<Tgpu>(static_cast<Tgpu>(0.0), static_cast<Tgpu>(1.0));
                 else /// \ref move_rand
                     rand();
             }
@@ -1161,11 +1162,17 @@ int ConvDriver<Tgpu, Tref>::AllocateBuffersAndCopy()
         {
             for(int i = 0; i < out_sz; i++)
                 if(is_bwd || is_wrw)
-                    dout.data[i] =
-                        Data_scale * RAN_GEN<Tgpu>(static_cast<Tgpu>(0.0), static_cast<Tgpu>(1.0));
+                    dout.data[i] = 1;
+                      //  Data_scale * RAN_GEN<Tgpu>(static_cast<Tgpu>(0.0), static_cast<Tgpu>(1.0));
                 else /// \ref move_rand
                     rand();
         }
+
+workspace[0] = 1;
+workspace[1] = 1;
+workspace[2] = 1;
+workspace[3] = 1;
+ workspace_dev->ToGPU(q, workspace.data());
 
         if(inflags.GetValueInt("bias") != 0)
         {
@@ -1979,14 +1986,14 @@ int ConvDriver<Tgpu, Tref>::RunBackwardGPU()
         return 0;
 
     int ret = 0;
-
+// workspace_dev->FromGPU(GetStream(), workspace.data());
     if(is_bwd)
     {
         auto rc = immediate_solution ? RunBackwardDataGpuImmed() : RunBackwardDataGpuFind();
         is_bwd_run_failed = (rc != 0);
         ret |= rc;
     }
-
+workspace_dev->ToGPU(q, workspace.data());
     if(is_wrw)
     {
         auto rc           = immediate_solution ? RunBackwardWrwGpuImmed() : RunBackwardWrwGpuFind();
@@ -2027,6 +2034,9 @@ int ConvDriver<Tgpu, Tref>::RunBackwardGPU()
             dumpBufferToFile<Tgpu>("dump_bwd_db_gpu.bin", db.data(), db.size());
         }
     }
+
+workspace_dev->FromGPU(GetStream(), workspace.data());
+
     return ret;
 }
 
@@ -2992,6 +3002,29 @@ int ConvDriver<Tgpu, Tref>::VerifyBackward()
                       << ')' << std::endl;
         }
     }
+
+for(int i=0; i<in.data.size();i++)
+printf("in   %d   %.20f \n", i, float(in.data[i]));
+
+for(int i=0; i<wei.data.size();i++)
+printf("wei   %d   %.20f \n", i, float(wei.data[i]));
+
+for(int i=0; i<workspace.size();i++)
+printf("wksp    %d   %.20f \n", i, float(workspace[i]));
+
+for(int i=0; i<out.data.size(); i++)
+printf("out    %d   %.20f   %.20f \n", i, float(outhost.data[i]), float(out.data[i]));
+
+for(int i=0; i<dout.data.size();i++)
+printf("dout   %d   %.20f \n", i, float(dout.data[i]));
+
+// for(int i=0; i<din_host.data.size(); i++)
+// printf("din    %d   %.20f   %.20f \n", i, float(din_host.data[i]), float(din[i]));
+
+for(int i=0; i<dwei_host.data.size(); i++)
+printf("dwei    %d   %.20f   %.20f \n", i, float(dwei_host.data[i]), float(dwei[i]));
+
+
 
     if(inflags.GetValueInt("bias") != 0)
     {
